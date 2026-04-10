@@ -72,6 +72,7 @@ describe('jwt', () => {
     json = createJSON();
     jwt = new JWT();
     sandbox = sinon.createSandbox();
+    sandbox.stub(JWT.prototype, 'getRegionalAccessBoundaryUrl').resolves(undefined);
   });
 
   afterEach(() => {
@@ -1287,6 +1288,7 @@ describe('jwt', () => {
     });
 
     it('should trigger asynchronous regional access boundaries refresh', async () => {
+      (JWT.prototype.getRegionalAccessBoundaryUrl as sinon.SinonStub).restore();
       const jwt = new JWT({
         email: SERVICE_ACCOUNT_EMAIL,
         keyFile: PEM_PATH,
@@ -1329,13 +1331,14 @@ describe('jwt', () => {
     });
 
     it('should trigger RAB refresh for self-signed JWT', async () => {
+      (JWT.prototype.getRegionalAccessBoundaryUrl as sinon.SinonStub).restore();
       // Self-signed JWT (no scopes)
       const keys = keypair(512);
       const jwt = new JWT({
         email: SERVICE_ACCOUNT_EMAIL,
         key: keys.private,
       });
-      jwt.credentials = { refresh_token: 'jwt-placeholder' };
+      jwt.credentials = {refresh_token: 'jwt-placeholder'};
 
       const lookupUrl = SERVICE_ACCOUNT_LOOKUP_ENDPOINT.replace(
         '{service_account_email}',
@@ -1401,6 +1404,7 @@ describe('jwt', () => {
     });
 
     it('should fail getRegionalAccessBoundaryUrl if no email is passed', async () => {
+      (JWT.prototype.getRegionalAccessBoundaryUrl as sinon.SinonStub).restore();
       const jwt = new JWT({
         keyFile: PEM_PATH,
         scopes: ['http://bar', 'http://foo'],

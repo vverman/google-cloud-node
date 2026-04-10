@@ -48,6 +48,7 @@ describe('compute', () => {
   let compute: Compute;
   beforeEach(() => {
     compute = new Compute();
+    sandbox.stub(Compute.prototype, 'getRegionalAccessBoundaryUrl').resolves(undefined);
   });
 
   afterEach(() => {
@@ -305,11 +306,10 @@ describe('compute', () => {
 
     beforeEach(() => {
       sandbox = sinon.createSandbox();
-      process.env['GOOGLE_AUTH_TRUST_BOUNDARY_ENABLE_EXPERIMENT'] = 'true';
+      (Compute.prototype.getRegionalAccessBoundaryUrl as sinon.SinonStub).restore();
     });
 
     afterEach(() => {
-      delete process.env['GOOGLE_AUTH_TRUST_BOUNDARY_ENABLE_EXPERIMENT'];
       sandbox.restore();
       nock.cleanAll();
     });
