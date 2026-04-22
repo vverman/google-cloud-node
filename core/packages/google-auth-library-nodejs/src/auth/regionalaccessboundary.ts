@@ -18,13 +18,13 @@ import {log as makeLog} from 'google-logging-utils';
 const log = makeLog('auth');
 
 export const SERVICE_ACCOUNT_LOOKUP_ENDPOINT =
-  'https://staging-iamcredentials.sandbox.googleapis.com/v1/projects/-/serviceAccounts/{service_account_email}/allowedLocations';
+  'https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/{service_account_email}/allowedLocations';
 
 export const WORKLOAD_LOOKUP_ENDPOINT =
-  'https://staging-iamcredentials.sandbox.googleapis.com/v1/projects/{project_id}/locations/global/workloadIdentityPools/{pool_id}/allowedLocations';
+  'https://iamcredentials.googleapis.com/v1/projects/{project_id}/locations/global/workloadIdentityPools/{pool_id}/allowedLocations';
 
 export const WORKFORCE_LOOKUP_ENDPOINT =
-  'https://staging-iamcredentials.sandbox.googleapis.com/v1/locations/global/workforcePools/{pool_id}/allowedLocations';
+  'https://iamcredentials.googleapis.com/v1/locations/global/workforcePools/{pool_id}/allowedLocations';
 
 /**
  * RAB is considered valid for 6 hours.
@@ -64,16 +64,7 @@ export interface RegionalAccessBoundaryData {
 }
 
 export function isRegionalAccessBoundaryEnabled() {
-  const rabEnabled =
-    process.env['GOOGLE_AUTH_TRUST_BOUNDARY_ENABLE_EXPERIMENT'];
-  if (rabEnabled === undefined || rabEnabled === null) {
-    return false;
-  }
-  const lowercasedRabEnabled = rabEnabled.toLowerCase();
-  if (lowercasedRabEnabled === 'true' || rabEnabled === '1') {
-    return true;
-  }
-  return false;
+  return true;
 }
 
 export interface RegionalAccessBoundaryManagerOptions {
